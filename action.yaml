@@ -1,0 +1,30 @@
+name: Image version
+description: Determines the container image version based on a git ref
+inputs:
+  ref:
+    description: The git ref to use. Defaults to `github.ref``.
+    default: ${{ github.ref }}
+    required: false
+outputs:
+  version:
+    description: The image version
+    value: ${{ steps.version.outputs.version }}
+runs:
+  using: composite
+  steps:
+  - name: Determine image version
+    id: version
+    shell: bash
+    run: |
+      if [[ $REF = refs/tags/* ]]; then
+        printf "version=%s\n" "${REF#refs\/tags\/v}" >> $GITHUB_OUTPUT
+      elif [[ $REF = refs/heads/* ]]; then
+        branch=${REF#refs\/heads\/}
+        [[ $branch != "main" ]] || branch=latest
+        [[ $branch != "master" ]] || branch=latest
+        printf "version=%s\n" "$branch" >> $GITHUB_OUTPUT
+      else
+        printf "version=%s\n" "$(git rev-parse --short "$REF")" >> $GITHUB_OUTPUT
+      fi
+    env:
+      REF: ${{ github.ref }}
