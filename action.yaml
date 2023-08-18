@@ -15,16 +15,4 @@ runs:
   - name: Determine image version
     id: version
     shell: bash
-    run: |
-      if [[ $REF = refs/tags/* ]]; then
-        printf "version=%s\n" "${REF#refs\/tags\/v}" >> $GITHUB_OUTPUT
-      elif [[ $REF = refs/heads/* ]]; then
-        branch=${REF#refs\/heads\/}
-        [[ $branch != "main" ]] || branch=latest
-        [[ $branch != "master" ]] || branch=latest
-        printf "version=%s\n" "$branch" >> $GITHUB_OUTPUT
-      else
-        printf "version=%s\n" "$(git rev-parse --short "$REF")" >> $GITHUB_OUTPUT
-      fi
-    env:
-      REF: ${{ github.ref }}
+    run: printf "version=%s\n" "$("$GITHUB_ACTION_PATH/image-version.sh" "${{ github.ref }}")" >> $GITHUB_OUTPUT

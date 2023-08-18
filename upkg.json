@@ -1,0 +1,5 @@
+{
+  "commands": {
+    "image-version": "image-version.sh"
+  }
+}
