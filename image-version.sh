@@ -5,11 +5,14 @@ main() {
   shopt -s inherit_errexit
 
   local ref=${1:?'Usage: image-version REF'}
-  if [[ $ref = refs/tags/* ]]; then
+  if [[ $ref = refs/tags/?[[:digit:]]* ]]; then
     local tag=${ref#'refs/tags/'}
     tag=${tag#'v'}
     printf "%s\n" "$tag"
-  elif [[ $ref = refs/heads/* ]]; then
+  elif [[ $ref = refs/tags/?* ]]; then
+    local tag=${ref#'refs/tags/'}
+    printf "%s\n" "$tag"
+  elif [[ $ref = refs/heads/?* ]]; then
     local branch=${ref#'refs/heads/'}
     [[ $branch != "main" ]] || branch=latest
     [[ $branch != "master" ]] || branch=latest

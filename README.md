@@ -11,10 +11,14 @@ CLI tool and GitHub action to determine the container image version based on a g
 | `refs/heads/ft-refactor`                                       | `ft-refactor` |
 | `refs/tags/v1.0.3`                                             | `1.0.3`       |
 | `refs/tags/1.0.3`                                              | `1.0.3`       |
+| `refs/tags/very-pinned` (only removes `v` prefix on `v[0-9]*`) | `very-pinned` |
 | `e02d09699ffb56440f34cb7448a0bc436e3ae212` (i.e. non-symbolic) | `e02d096`     |
 | `e02d09699ffb56440f34cb7448` (not 40 hex chars)                | error         |
 | `master` (no `refs/heads` prefix)                              | error         |
 | `v1.0.3` (no `refs/tags/` prefix)                              | error         |
+| `refs/heads/` (empty branch name)                              | error         |
+| `refs/tags/` (empty tag name)                                  | error         |
+| `refs/tags/v` (empty tag name)                                 | error         |
 
 ## CLI
 
