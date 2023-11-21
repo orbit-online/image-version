@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 main() {
-  set -eo pipefail
-  shopt -s inherit_errexit
+  set -eo pipefail; shopt -s inherit_errexit
 
   local ref=${1:?'Usage: image-version REF'}
   if [[ $ref = refs/tags/?[[:digit:]]* ]]; then
