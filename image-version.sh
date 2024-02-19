@@ -4,10 +4,9 @@ main() {
   set -eo pipefail; shopt -s inherit_errexit
 
   local ref=${1:?'Usage: image-version REF'}
-  if [[ $ref = refs/tags/?[[:digit:]]* ]]; then
+  if [[ $ref =~ ^refs/tags/v?[0-9]+ ]]; then
     local tag=${ref#'refs/tags/'}
-    tag=${tag#'v'}
-    printf "%s\n" "$tag"
+    printf "%s\n" "${tag#v}"
   elif [[ $ref = refs/tags/?* ]]; then
     local tag=${ref#'refs/tags/'}
     printf "%s\n" "$tag"
