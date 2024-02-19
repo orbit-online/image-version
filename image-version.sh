@@ -17,8 +17,7 @@ main() {
     [[ $branch != "master" ]] || branch=latest
     printf "%s\n" "$branch"
   elif [[ $ref =~ ^[0-9a-f]{40}$ ]]; then
-    ref="$(git rev-parse --short "$ref")"
-    printf "%s\n" "$ref"
+    printf "%s\n" "${ref:0:8}"
   else
     printf "image-version.sh: REF must start with refs/tags/, refs/heads/, or be a shasum. Got '%s'.\n" "$ref" >&2
     return 1
