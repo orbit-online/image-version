@@ -16,7 +16,7 @@ CLI tool and GitHub action to determine the container image version based on a g
 | `refs/tags/v` (empty tag name)                                 | `v`           |
 | `e02d09699ffb56440f34cb7448a0bc436e3ae212` (i.e. non-symbolic) | `e02d0969`    |
 | `e02d09699ffb56440f34cb7448` (not 40 hex chars)                | error         |
-| `master` (no `refs/heads` prefix)                              | error         |
+| `master` (no `refs/heads/` prefix)                             | error         |
 | `v1.0.3` (no `refs/tags/` prefix)                              | error         |
 | `refs/heads/` (empty branch name)                              | error         |
 | `refs/tags/` (empty tag name)                                  | error         |
@@ -67,7 +67,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-    - id: version
+    - id: image_version
       uses: orbit-online/image-version@v0.9.0
     - uses: actions/checkout@v3
     - uses: docker/setup-buildx-action@v2
@@ -79,6 +79,6 @@ jobs:
       uses: docker/build-push-action@v4
       with:
         file: Dockerfile
-        tags: orbit-online/image-version:${{ steps.version.outputs.version }}
+        tags: orbit-online/my-prog:${{ steps.image_version.outputs.version }}
         push: true
 ```
