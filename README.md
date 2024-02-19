@@ -41,8 +41,8 @@ pass that straight to this tool (`git symbolic-ref` is used as a fallback
 in order for it to work in your git repo while developing):
 
 ```
-pkgroot=$(upkg root "${BASH_SOURCE[0]}")
-version=$(image-version "$(jq -re '.version // empty' "$PKGROOT/upkg.json" 2>/dev/null || git -C "$pkgroot" symbolic-ref HEAD)")
+PKGROOT=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
+version=$(image-version "$(jq -re '.version // empty' "$PKGROOT/upkg.json" 2>/dev/null || git -C "$PKGROOT" symbolic-ref HEAD)")
 ```
 
 ## GitHub action
