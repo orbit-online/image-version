@@ -4,6 +4,10 @@ CLI tool and GitHub action to determine the container image version based on a g
 Take a look at [program-version](https://github.com/orbit-online/program-version) if
 you need the `--version` variant that programs normally output.
 
+## Installation
+
+See [the latest release](https://github.com/orbit-online/image-version/releases/latest) for instructions.
+
 ## Behavior
 
 | git ref                                                        | image version |
@@ -24,14 +28,6 @@ you need the `--version` variant that programs normally output.
 | `refs/tags/` (empty tag name)                                  | error         |
 
 ## CLI
-
-### Installation
-
-With [μpkg](https://github.com/orbit-online/upkg)
-
-```
-upkg install -g orbit-online/image-version@<VERSION>
-```
 
 ### Usage
 

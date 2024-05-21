@@ -15,4 +15,4 @@ runs:
   - name: Determine image version
     id: version
     shell: bash
-    run: printf "version=%s\n" "$("$GITHUB_ACTION_PATH/image-version.sh" "${{ github.ref }}")" >> $GITHUB_OUTPUT
+    run: printf "version=%s\n" "$("$GITHUB_ACTION_PATH/bin/image-version" "${{ inputs.ref }}")" >> $GITHUB_OUTPUT

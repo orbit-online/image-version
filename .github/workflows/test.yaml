@@ -2,29 +2,26 @@ name: Test
 
 on:
   push:
-    branches: [ '*' ]
-    tags: [ 'v*' ]
+    branches: ['*']
+    tags: ['!v*']
+  workflow_call: {}
 
 jobs:
-  lint:
+  test:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v4
+    - uses: orbit-online/upkg-install@v1
+      with:
+        install-dependencies: 'true'
     - name: Run ShellCheck
       uses: ludeeus/action-shellcheck@master
       env:
         SHELLCHECK_OPTS: -x
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Setup BATS
-      run: |
-        git clone --depth 1 --branch v1.10.0 https://github.com/bats-core/bats-core.git /tmp/bats
-        sudo /tmp/bats/install.sh /usr/local
-        rm -rf /tmp/bats
-    - name: Checkout
-      uses: actions/checkout@v4
-    - uses: orbit-online/upkg@v0.14.0
+      with:
+        ignore_paths: .upkg
+    - name: Install bats
+      uses: bats-core/bats-action@2.0.0
     - name: Run tests
       run: bats .

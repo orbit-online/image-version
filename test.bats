@@ -6,66 +6,66 @@ setup_file() {
 }
 
 @test 'refs/heads/main=latest' {
-  run ./image-version.sh refs/heads/main
+  run bin/image-version refs/heads/main
   [ "$output" = "latest" ]
 }
 
 @test 'refs/heads/master=latest' {
-  run ./image-version.sh refs/heads/master
+  run bin/image-version refs/heads/master
   [ "$output" = "latest" ]
 }
 
 @test 'refs/heads/ft-refactor=ft-refactor' {
-  run ./image-version.sh refs/heads/ft-refactor
+  run bin/image-version refs/heads/ft-refactor
   [ "$output" = "ft-refactor" ]
 }
 
 @test 'refs/tags/v1.0.3=1.0.3' {
-  run ./image-version.sh refs/tags/v1.0.3
+  run bin/image-version refs/tags/v1.0.3
   [ "$output" = "1.0.3" ]
 }
 
 @test 'refs/tags/1.0.3=1.0.3' {
-  run ./image-version.sh refs/tags/1.0.3
+  run bin/image-version refs/tags/1.0.3
   [ "$output" = "1.0.3" ]
 }
 
 @test 'refs/tags/very-pinned=very-pinned' {
-  run ./image-version.sh refs/tags/very-pinned
+  run bin/image-version refs/tags/very-pinned
   [ "$output" = "very-pinned" ]
 }
 
 @test 'refs/tags/f1.0.3=f1.0.3' {
-  run ./image-version.sh refs/tags/f1.0.3
+  run bin/image-version refs/tags/f1.0.3
   [ "$output" = "f1.0.3" ]
 }
 
 @test 'refs/tags/v=v' {
-  run ./image-version.sh refs/tags/v
+  run bin/image-version refs/tags/v
   [ "$output" = "v" ]
 }
 
 @test 'e02d09699ffb56440f34cb7448a0bc436e3ae212=e02d0969' {
-  run ./image-version.sh e02d09699ffb56440f34cb7448a0bc436e3ae212
+  run bin/image-version e02d09699ffb56440f34cb7448a0bc436e3ae212
   [ "$output" = "e02d0969" ]
 }
 
 @test 'e02d09699ffb56440f34cb7448=error' {
-  run -1 ./image-version.sh e02d09699ffb56440f34cb7448
+  run -1 bin/image-version e02d09699ffb56440f34cb7448
 }
 
 @test 'master=error' {
-  run -1 ./image-version.sh master
+  run -1 bin/image-version master
 }
 
 @test 'v1.0.3=error' {
-  run -1 ./image-version.sh v1.0.3
+  run -1 bin/image-version v1.0.3
 }
 
 @test 'refs/heads=error' {
-  run -1 ./image-version.sh refs/heads
+  run -1 bin/image-version refs/heads
 }
 
 @test 'refs/tags=error' {
-  run -1 ./image-version.sh refs/tags
+  run -1 bin/image-version refs/tags
 }
