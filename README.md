@@ -74,7 +74,7 @@ jobs:
         username: ${{ secrets.DOCKER_HUB_USERNAME }}
         password: ${{ secrets.DOCKER_HUB_TOKEN_RW }}
     - name: Build & push
-      uses: docker/build-push-action@v4
+      uses: docker/build-push-action@v5
       with:
         file: Dockerfile
         tags: orbit-online/my-prog:${{ steps.image_version.outputs.version }}
