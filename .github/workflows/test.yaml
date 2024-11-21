@@ -25,6 +25,6 @@ jobs:
     - name: Generate test summary
       uses: test-summary/action@v2
       with:
-        paths: upkg/tests/results.tap
+        paths: results.tap
         show: "fail, skip"
       if: always()

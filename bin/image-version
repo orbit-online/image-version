@@ -1,26 +1,61 @@
 #!/usr/bin/env bash
+# shellcheck source-path=..
+set -Eeo pipefail; shopt -s inherit_errexit
 
 main() {
-  set -eo pipefail; shopt -s inherit_errexit
+  [[ $# -ge 1 ]] || usage
+  [[ $# -le 3 ]] || usage
+  local REF P='v'
+  while [[ $# -gt 0 ]]; do
+    [[ $1 != --help ]] || usage
+    if [[ $1 = --prefix=* ]]; then
+      [[ $P = 'v' ]] || usage
+      P=${1#'--prefix='}
+    elif [[ $1 = '--prefix' ]]; then
+      [[ $# -ge 1 && $P = 'v' ]] || usage
+      shift
+      P=$1
+    elif [[ $1 = '-p' ]]; then
+      [[ $# -ge 1 && $P = 'v' ]] || usage
+      shift
+      P=$1
+    elif [[ $1 = '-p'* ]]; then
+      [[ $P = 'v' ]] || usage
+      P=${1#'-p'}
+    else
+      [[ -z $REF ]] || usage
+      REF=$1
+    fi
+    shift
+  done
+  [[ -n $REF ]] || usage
 
-  local ref=${1:?'Usage: image-version REF'}
-  if [[ $ref =~ ^refs/tags/v?[0-9]+ ]]; then
-    local tag=${ref#'refs/tags/'}
-    printf "%s\n" "${tag#v}"
-  elif [[ $ref = refs/tags/?* ]]; then
-    local tag=${ref#'refs/tags/'}
-    printf "%s\n" "$tag"
-  elif [[ $ref = refs/heads/?* ]]; then
-    local branch=${ref#'refs/heads/'}
+  if [[ $REF = refs/tags/${P}* && ${REF#"refs/tags/$P"} =~ ^[0-9] ]]; then
+    printf "%s\n" "${REF#"refs/tags/$P"}"
+  elif [[ $REF = refs/tags/* ]]; then
+    printf "%s\n" "${REF#'refs/tags/'}"
+  elif [[ $REF = refs/heads/* ]]; then
+    local branch=${REF#'refs/heads/'}
     [[ $branch != "main" ]] || branch=latest
     [[ $branch != "master" ]] || branch=latest
     printf "%s\n" "$branch"
-  elif [[ $ref =~ ^[0-9a-f]{40}$ ]]; then
-    printf "%s\n" "${ref:0:8}"
+  elif [[ $REF =~ ^[0-9a-f]{40}$ ]]; then
+    printf "%s\n" "${REF:0:8}"
   else
-    printf "image-version.sh: REF must start with refs/tags/, refs/heads/, or be a shasum. Got '%s'.\n" "$ref" >&2
+    printf "image-version: REF must start with refs/tags/, refs/heads/, or be a shasum. Got '%s'.\n" "$REF" >&2
     return 1
   fi
+}
+
+usage() {
+  printf "image-version - Determine the container image version based on a git ref.
+Usage:
+  image-version [-p P] REF
+
+Options:
+  -p --prefix P  Prefix to remove in tags [default: v]
+" >&2
+  return 1
 }
 
 main "$@"

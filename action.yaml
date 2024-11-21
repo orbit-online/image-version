@@ -5,14 +5,18 @@ inputs:
     description: The git ref to use. Defaults to `github.ref``.
     default: ${{ github.ref }}
     required: false
+  prefix:
+    description: Prefix to remove in tags. Defaults to `v``.
+    default: ${{ github.ref }}
+    required: false
 outputs:
   version:
-    description: The image version
+    description: The image tag
     value: ${{ steps.version.outputs.version }}
 runs:
   using: composite
   steps:
-  - name: Determine image version
+  - name: Determine image tag
     id: version
     shell: bash
     run: printf "version=%s\n" "$("$GITHUB_ACTION_PATH/bin/image-version" "${{ inputs.ref }}")" >> $GITHUB_OUTPUT
