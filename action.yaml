@@ -7,7 +7,7 @@ inputs:
     required: false
   prefix:
     description: Prefix to remove in tags. Defaults to `v``.
-    default: ${{ github.ref }}
+    default: v
     required: false
 outputs:
   version:
@@ -19,4 +19,4 @@ runs:
   - name: Determine image tag
     id: version
     shell: bash
-    run: printf "version=%s\n" "$("$GITHUB_ACTION_PATH/bin/image-version" "${{ inputs.ref }}")" >> $GITHUB_OUTPUT
+    run: printf "version=%s\n" "$("$GITHUB_ACTION_PATH/bin/image-version" -p "${{ inputs.prefix }}" "${{ inputs.ref }}")" >> $GITHUB_OUTPUT
